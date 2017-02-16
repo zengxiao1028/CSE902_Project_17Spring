@@ -4,6 +4,7 @@ import numpy as np
 from network.gen_data import get_batch
 import project_config
 import time
+import os
 def train():
 
     X_train = np.zeros((128,224,224,1))
@@ -35,9 +36,9 @@ def train():
             duration = time.time() - start_time
 
             # Write the summaries and print an overview fairly often.
-            if step % 1 == 0:
+            if step % 100 == 0:
                 # Print status to stdout.
-                print('Step %d: loss = %.2f (%.3f sec)' % (step, loss,
+                print('Step %d: loss = %.2f  acc = %.2f (%.3f sec)' % (step, loss,acc,
                                                            duration))
 
     except tf.errors.OutOfRangeError:
@@ -53,6 +54,7 @@ def train():
 
 
 def main(_):
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     train()
 
 if __name__ == '__main__':
