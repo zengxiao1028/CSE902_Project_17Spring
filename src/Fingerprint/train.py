@@ -34,7 +34,7 @@ def train():
 
             duration = time.time() - start_time
 
-            # Write the summaries and print an overview fairly often.
+            # test procedure
             if step % 100 == 0:
                 # Print status to stdout.
                 x_test_batch, y_test_batch = sess.run([x_test, y_test])
