@@ -7,13 +7,12 @@ import time
 import os
 def train():
 
-    X_train = np.zeros((128,224,224,1))
-
+    shape = (None,project_config.IMG_SIZE,project_config.IMG_SIZE,1)
     num_classes = 5
 
-    net = network.FingerNet(X_train.shape,num_classes)
+    net = network.FingerNet(shape,num_classes)
 
-    x_batch, y_batch = get_batch(project_config.DES_FOLDER,64)
+    x_train, y_train, x_test, y_test = get_batch(project_config.DES_FOLDER,64)
 
     sess = tf.Session()
 
@@ -29,17 +28,20 @@ def train():
             start_time = time.time()
 
             # Run one step of the model.
-            x, y = sess.run([x_batch, y_batch])
-            _,loss,acc,step = sess.run([net.train_op, net.loss, net.acc, net.global_step],
-                                       feed_dict={net.x_ph:x,net.y_ph:y,net.is_training:True})
+            x_train_batch, y_train_batch = sess.run([x_train, y_train])
+            _,step= sess.run([net.train_op, net.global_step],
+                                       feed_dict={net.x_ph:x_train_batch,net.y_ph:y_train_batch,net.is_training:True})
 
             duration = time.time() - start_time
 
             # Write the summaries and print an overview fairly often.
             if step % 100 == 0:
                 # Print status to stdout.
-                print('Step %d: loss = %.2f  acc = %.2f (%.3f sec)' % (step, loss,acc,
-                                                           duration))
+                x_test_batch, y_test_batch = sess.run([x_test, y_test])
+                loss, acc = sess.run([ net.loss, net.acc, ],
+                                             feed_dict={net.x_ph: x_test_batch, net.y_ph: y_test_batch,
+                                                        net.is_training: False})
+                print('Step %d: loss = %.2f  acc = %.2f (%.3f sec)' % (step, loss,acc, duration))
 
     except tf.errors.OutOfRangeError:
         print('Done training')

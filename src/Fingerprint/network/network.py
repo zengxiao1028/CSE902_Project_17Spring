@@ -28,7 +28,7 @@ class FingerNet:
         #train or test
         is_training = tf.placeholder(dtype=tf.bool)
 
-        with slim.arg_scope([slim.convolution2d, slim.fully_connected], weights_regularizer=slim.l2_regularizer(0.001)):
+        with slim.arg_scope([slim.convolution2d, slim.fully_connected], weights_regularizer=slim.l2_regularizer(0.0001)):
 
             conv_1 = slim.convolution2d(x_ph, 96, kernel_size=11, stride=4, padding='VALID', scope='conv1')
             conv_1_pool = slim.max_pool2d(conv_1, kernel_size=3, stride=2, scope='pool1')
@@ -54,7 +54,7 @@ class FingerNet:
             fc6_dropout = slim.dropout(fc6, is_training=is_training, scope='fc6_dropout')
 
             fc7 = slim.fully_connected(fc6_dropout, self.num_classes, activation_fn=None, scope='fc7')
-            prediction = tf.reduce_max(fc7,axis=1,name = 'prediction')
+            prediction = tf.argmax(fc7,axis=1,name = 'prediction')
 
         #prediction
         acc = slim.metrics.accuracy(predictions=tf.cast(prediction, dtype=tf.int32), labels=tf.cast(y_ph, dtype=tf.int32))
@@ -63,15 +63,17 @@ class FingerNet:
         tf.losses.sparse_softmax_cross_entropy( tf.cast(y_ph, dtype=tf.int32),fc7)
         #add regularization loss
         total_loss = tf.losses.get_total_loss(add_regularization_losses=True)
+
+        #
         self.optimizor = tf.train.AdamOptimizer(learning_rate=1e-5)
         train_op = self.optimizor.minimize(total_loss,global_step=global_step)
 
         self.x_ph = x_ph
         self.y_ph = y_ph
         self.is_training = is_training
-        self.predict = prediction
         self.acc = acc
         self.loss = total_loss
         self.optimizor = train_op
         self.global_step = global_step
         self.train_op = train_op
+        self.predction = prediction

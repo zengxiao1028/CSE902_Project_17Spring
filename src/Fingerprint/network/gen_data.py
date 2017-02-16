@@ -22,10 +22,9 @@ def preprocess(img):
     image = tf.image.resize_images(image, [250, 250])
     image = tf.random_crop(image, [project_config.IMG_SIZE,project_config.IMG_SIZE,1])
 
-    #distorted_image = tf.image.random_brightness(image,max_delta=63)
+    distorted_image = tf.image.random_brightness(image,max_delta=63)
 
-
-    #distorted_image = tf.image.random_contrast(distorted_image,lower=0.2, upper=1.8)
+    image = tf.image.random_contrast(distorted_image,lower=0.2, upper=1.8)
 
     #Subtract off the mean and divide by the variance of the pixels.
     #float_image = tf.image.per_image_whitening(distorted_image)
@@ -51,25 +50,39 @@ def get_batch(imgs_folder, batch_size):
 
 
     #training sampels
-    images = tf.convert_to_tensor(X_train_list, dtype=tf.string)
-    labels = tf.convert_to_tensor(y_train, dtype=tf.int32)
+    images_train = tf.convert_to_tensor(X_train_list, dtype=tf.string)
+    labels_train = tf.convert_to_tensor(y_train, dtype=tf.int32)
 
     # Makes an input queue
-    input_queue = tf.train.slice_input_producer([images, labels], shuffle=True)
-
-    image, label = read_images_from_disk(input_queue)
+    input_queue_train = tf.train.slice_input_producer([images_train, labels_train], shuffle=True)
+    image_train, label_train = read_images_from_disk(input_queue_train)
 
     # Optional Preprocessing or Data Augmentation
     # tf.image implements most of the standard image augmentation
-    image = preprocess(image)
+    image_train = preprocess(image_train)
 
     # Optional Image and Label Batching
-    image_batch, label_batch = tf.train.batch([image, label],
+    image_batch_train, label_batch_train = tf.train.batch([image_train, label_train],
                                               batch_size=batch_size,capacity=512)
 
-    #test samples
+    #testing sampels
+    images_test = tf.convert_to_tensor(X_test_list, dtype=tf.string)
+    labels_test = tf.convert_to_tensor(y_test, dtype=tf.int32)
 
-    return image_batch, label_batch
+    # Makes an input queue
+    input_queue_test = tf.train.slice_input_producer([images_test, labels_test], shuffle=True)
+    image_test, label_test = read_images_from_disk(input_queue_test)
+
+    # Optional Preprocessing or Data Augmentation
+    # tf.image implements most of the standard image augmentation
+    image_test = preprocess(image_test)
+
+    # Optional Image and Label Batching
+    image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],
+                                              batch_size=batch_size,capacity=256)
+
+    #test samples
+    return image_batch_train, label_batch_train, image_batch_test, label_batch_test
 
 
 
