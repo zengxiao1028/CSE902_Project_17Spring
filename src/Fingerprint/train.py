@@ -5,6 +5,7 @@ from network.gen_data import get_batch
 import project_config
 import time
 import os
+import fingerprint_data.downsample_sd4
 def train():
 
     shape = (None,project_config.IMG_SIZE,project_config.IMG_SIZE,1)
@@ -57,6 +58,15 @@ def train():
 
 def main(_):
     os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+
+    #if raw data have not been processed
+    if not os.path.exists(project_config.DES_FOLDER):
+        os.mkdir(project_config.DES_FOLDER)
+        for i in range(8):
+            scr_folder = os.path.join(project_config.RAWDATA_FOLDER, 'figs_' + str(i))
+            # resize the images to the size we want
+            fingerprint_data.downsample_sd4.convert(scr_folder, project_config.DES_FOLDER)
+
     train()
 
 if __name__ == '__main__':
