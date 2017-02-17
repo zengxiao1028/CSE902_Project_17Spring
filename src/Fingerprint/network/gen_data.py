@@ -22,9 +22,9 @@ def preprocess(img):
     image = tf.image.resize_images(image, [250, 250])
     image = tf.random_crop(image, [project_config.IMG_SIZE,project_config.IMG_SIZE,1])
 
-    distorted_image = tf.image.random_brightness(image,max_delta=63)
+    distorted_image = tf.image.random_brightness(image, max_delta=63)
 
-    image = tf.image.random_contrast(distorted_image,lower=0.2, upper=1.8)
+    image = tf.image.random_contrast(distorted_image, lower=0.2, upper=1.8)
 
     #Subtract off the mean and divide by the variance of the pixels.
     #float_image = tf.image.per_image_whitening(distorted_image)

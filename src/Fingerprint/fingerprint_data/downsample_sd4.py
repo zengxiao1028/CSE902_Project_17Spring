@@ -9,6 +9,7 @@ def convert_label(x):
 def convert_gender(x):
     return {'F':'0','M':'1'}.get(x,'error')
 
+#convert raw data pngs to small size pngs with labels in their filenames
 def convert(src_folder, dst_folder):
 
    files = os.listdir(src_folder)
@@ -39,9 +40,12 @@ def convert(src_folder, dst_folder):
             label = convert_label(label[-2])
 
         #destination path
-        new_img_name = each[:-4] + '_' + gender+ '_' + label + '.png'
+        #
+        # new file is named as follows: 'filename_finger_gender_label.png'
+        #
+        new_img_name = each[:-4] + '_' + gender + '_' + label + '.png'
         dst_path = os.path.join(dst_folder, new_img_name)
-        cv2.imwrite(dst_path,img)
+        cv2.imwrite(dst_path, img)
 
 
 if __name__ == '__main__':
