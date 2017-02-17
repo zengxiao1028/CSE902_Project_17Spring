@@ -34,7 +34,6 @@ def train():
                                        feed_dict={net.x_ph:x_train_batch,net.y_ph:y_train_batch,net.is_training:True})
 
             duration = time.time() - start_time
-
             # test procedure
             if step % 50 == 0:
                 # Print status to stdout.
