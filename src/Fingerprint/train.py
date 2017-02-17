@@ -29,19 +29,19 @@ def train():
 
             # Run one step of the model.
             x_train_batch, y_train_batch = sess.run([x_train, y_train])
-            _,step= sess.run([net.train_op, net.global_step],
+            _, step,loss, acc, x_entropy = sess.run([net.train_op, net.global_step, net.loss, net.acc,net.x_entropy],
                                        feed_dict={net.x_ph:x_train_batch,net.y_ph:y_train_batch,net.is_training:True})
 
             duration = time.time() - start_time
 
             # test procedure
-            if step % 100 == 0:
+            if step % 50 == 0:
                 # Print status to stdout.
                 x_test_batch, y_test_batch = sess.run([x_test, y_test])
-                loss, acc = sess.run([ net.loss, net.acc, ],
+                loss_test, acc_test, x_entropy_test = sess.run([ net.loss, net.acc, net.x_entropy ],
                                              feed_dict={net.x_ph: x_test_batch, net.y_ph: y_test_batch,
                                                         net.is_training: False})
-                print('Step %d: loss = %.2f  acc = %.2f (%.3f sec)' % (step, loss,acc, duration))
+                print('Step %d: loss(xentropy) = %.2f (%.2f)  acc = %.2f (%.3f sec)' % (step, loss_test, x_entropy_test,acc_test, duration))
 
     except tf.errors.OutOfRangeError:
         print('Done training')

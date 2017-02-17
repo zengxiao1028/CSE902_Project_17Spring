@@ -60,7 +60,7 @@ class FingerNet:
         acc = slim.metrics.accuracy(predictions=tf.cast(prediction, dtype=tf.int32), labels=tf.cast(y_ph, dtype=tf.int32))
 
         # classification loss
-        tf.losses.sparse_softmax_cross_entropy( tf.cast(y_ph, dtype=tf.int32),fc7)
+        x_entropy = tf.losses.sparse_softmax_cross_entropy( tf.cast(y_ph, dtype=tf.int32),fc7)
         #add regularization loss
         total_loss = tf.losses.get_total_loss(add_regularization_losses=True)
 
@@ -73,6 +73,7 @@ class FingerNet:
         self.is_training = is_training
         self.acc = acc
         self.loss = total_loss
+        self.x_entropy = x_entropy
         self.optimizor = train_op
         self.global_step = global_step
         self.train_op = train_op
