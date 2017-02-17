@@ -7,8 +7,15 @@ The challenge of classifying fingerprint includes:
 %
 3) some fingerprints can be classified into multiple classes and there exists some ambiguity in the label.
 
-To solve these problems, many researchers propose to use handcrafted features instead of raw fingerprint images for classification and many methods have been proposed. 
+To solve these problems, many researchers propose to use handcrafted features instead of raw fingerprint images for classification and many methods have been proposed, including ridge, orientation field, singular point.
 %
 Kai Cao \textit{et al.}\cite{cao2013fingerprint} propose to a novel method to extract fingerprint orientation feature and use a hierarchical classifier for classification.
 %
-Ruxin Wang \textit{et al.} \cite{wang2014fingerprint} also use fingerprint orientation as feature. By adopting stacked autoencoder
+Ruxin Wang \textit{et al.} \cite{wang2014fingerprint} also use orientation filed as feature. By adopting a stacked autoencoder , they achieve 93.1\% in four-class classification.
+%
+
+Using accurate handcrafted features can improve performance.  However, due to the existence of noise and poor image quality, the accuracy of handcrafted features cannot be guaranteed.
+%
+Convolutional neural network (CNN) has the capability of learning features and it can be directly applied on raw images. CNN also exhibits powerful classification capability in many areas.\cite{szegedy2016rethinking}.
+
+
