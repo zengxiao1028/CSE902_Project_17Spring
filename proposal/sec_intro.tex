@@ -1,28 +1,25 @@
 %!TEX root = main.tex
 
 
-Fingerprints are ridge and valley patterns present on the surface of human fingertips.
+Fingerprints are ridge and valley patterns presented on the surface of human fingertips.
 %
-Fingerprint matching has played a critical role in identifying suspects and criminals.
+Fingerprints recognition techniques are applied in many areas such as authentication, suspects identification and privacy protection.
 %
-Due to fingerprint’s high discriminability and persistence over time, fingerprint-based person recognition systems have been widely deployed.
+Typically, to query a fingerprint, the system needs to search and match thousands of fingerprints that are stored in the database. This is a time-consuming process due to huge amount of computation.
 %
-Fingerprint recognition systems have played a crucial role in various applications, including law enforcement, forensics, physical and logical access control, border crossing and civil registry.
+To mitigate this problem, we can first classify a fingerprint into a basic type and then perform fingerprint match within fingerprints of that type.
 %
-Fingerprint features can be divided into three major categories based on the granularity at which they are extracted: level 1, level 2 and level 3 features.
+
 %
-In this project, we are going to implment a fingerprint recognition system that classify a fingerprin into the following 5 categories:
+Most of fingerprint classification problems adopts Galton– Henry classification scheme.\cite{henry1905classification}. Thus, in this project, we are going to propose a fingerprint recognition system that classify a fingerprint into the following 5 categories:
 %
 A=Arch, L=Left Loop, R=Right Loop, T=Tented Arch, W=Whorl.
 %
-As shown in Fig.\ref{fig.fingerprint_classes}
-
 \begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=8cm]{fig/Fingerprint_classes.png}
 	\end{center}
-	\caption{Fingerprint classes: Top row: arch, left loop, and right loop. Bottom row: tented arch, whorl, and twin-loop. Triangles mark deltas; diamonds mark cores and whorls. Note that there is an invisible delta further to the bottom left of the last image, which actually shows a tented-arch-and-loop rather than a twin-loop. These are based on images from the FVC 2000, Database 2a [34]. }
+	\caption{Examples of fingerprint classes: (a) Arch (b) Tented Arch (c) Left Loop (d) Right Loop  (e) Whorl \cite{cao2013fingerprint}} 
 	\label{fig.fingerprint_classes}
 \end{figure}
 
-From the last image in Fig.\ref{fig.fingerprint_classes} we can see that one fingerprint may be classified into multiple categories at the same time.
