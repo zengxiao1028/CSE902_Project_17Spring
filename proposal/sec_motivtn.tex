@@ -11,11 +11,12 @@ Previous work mostly consist of singularity points (core and delta) detection or
 %
 Therefore, the accuracy of these methods depends on the goodness (or utility) of the selected features and the precision of the feature extraction portion of the algorithms. Both are sensitive to the noise and the variations of the gray-scale level of the input image.  
 %
-Using handcrafted features can improve performance.  However, in addition to be burdensome and time consuming, accuracy of handcrafted features cannot be guaranteed due to the existence of noise and poor image quality. 
+Using handcrafted features can improve performance.  However, in addition to being burdensome and time consuming, accuracy of handcrafted features cannot be guaranteed due to the existence of noise and poor image quality. 
 %
 Moreover, their repeatability and reproducibility cannot be guaranteed either, due to inter- and intra-examiners variations \cite{fbiBlackbox}.  
 %
 Our approach differs from these works in the sense that we aim to use raw images instead of features as input. Convolutional neural network (CNN) has the capability of learning features and it can be directly applied on raw images. CNN also exhibits powerful classification capability in many areas\cite{lecun2015deep}\cite{szegedy2016rethinking}.
+
 %
 An overview of related work follows. 
 %
@@ -27,7 +28,7 @@ Jain \textit{et al.} \cite{JainSalil1999} use a bank of Gabor filters to compute
 %
 Cappelli \textit{et al.} \cite{cappelli1999} partitioned a fingerprint directional image into ``homogeneous'' connected regions according to the fingerprint topology, resulting in a synthetic representation which is then used as a basis for the classification.
 %
- Bernard \textit{et al.} \cite{Bernard2001} used the Kohonen topologic map for fingerprint pattern classification. 
+Bernard \textit{et al.} \cite{Bernard2001} used the Kohonen topologic map for fingerprint pattern classification. 
 %
 Kai Cao \textit{et al.}\cite{cao2013fingerprint} propose to extract fingerprint orientation feature and use a hierarchical classifier for classification.
 %

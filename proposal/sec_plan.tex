@@ -4,11 +4,11 @@ In this project, we aim to develop and implement a deep learning algorithm that 
 
 \subsection{Feature Extraction}
 %
-We will first apply raw fingerprint images to train a CNN for classification. The outputs of some intermediate layer  of CNN will be used as features for possibly a support vector machine classifier.
-%
-We will consider using automated extracted features (\textit{e.g.},orientation filed) as inputs for CNN training, with the goal of combining raw images and automated features as input to train CNN.
+We will first apply raw fingerprint images to train a CNN for classification. The outputs of some intermediate layer of CNN will be used as features for possibly a support vector machine classifier.
 
-For CNN architecture, we will first use canonical architecture ( such as 5 \textit{convolutional} + 3 \textit{fully-connected} in \textit{AlexNet}\cite{krizhevsky2012imagenet}). We will then modify the CNN architecture to improve the performance.
+For CNN architecture, we will first use canonical architecture ( such as 5 \textit{convolutional} + 3 \textit{fully-connected} in \textit{AlexNet}\cite{krizhevsky2012imagenet}).
+%
+We will then modify the CNN architecture to improve the performance.
 %
 \subsection{Classifier}
 %
@@ -17,8 +17,22 @@ We will consider two classifiers. The first one is the prediction layer of CNN. 
 The second one is support vector machine (SVM whose input features comprise of the CNN’s middle or last layers.
 
 \subsection{Data Augmentation}
+
 %
 To further improve the performance, we will use data augmentation technique to generate more training samples in order to increase the generalization ability of our model. 
 %
-The augmentation methods include rotation, resizing and translation.
+The augmentation methods include image rotation, resizing and translation.
 
+\subsection{Multi-Task Learning}
+
+Multi-Task Learning (MTL)\cite{caruana1998multitask} aims to improve the performance of multiple classification tasks by learning them jointly.
+%
+In MTL, some tasks can benefit from auxiliary information which is introduced by other tasks and the performance is improved\cite{zhang2016learning}.
+%
+In our project, the network is trained to perform both the primary task (fingerprint type classification)and one or more auxiliary tasks. 
+%
+The classification task is expected to benefit from the auxiliary task by jointly training them together.
+%
+This process can also be view as incorporating human knowledge into to training procedure.
+
+To obtain labels for auxiliary tasks, we will use existing methods. For example, orientation flow estimation\cite{NFIQ}.
