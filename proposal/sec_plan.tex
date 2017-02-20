@@ -1,24 +1,21 @@
 %!TEX root = main.tex
 
-In this project, we aim to develop and implement a deep learning algorithm for addressing fingerprint classification problem.
+In this project, we aim to develop and implement a deep learning algorithm that takes a fingerprint image as an input and clsiify it into one of the five pattern class types of a) Arch; b) Tented Arch; c) Left Loop; d) Right Loop; or e) Whorl. 
 
 \subsection{Feature Extraction}
 %
-To explore possible features, we will first apply raw fingerprint images to train a CNN for classification. The outputs of some intermediate layer  of CNN will be used as features.
+We will first apply raw fingerprint images to train a CNN for classification. The outputs of some intermediate layer  of CNN will be used as features for possibly a support vector machine classifier.
 %
-We will also use traditional handcrafted features (\textit{e.g.},orientation filed) as inputs for CNN training. 
-%
-In the end, we plan to combine raw images and handcrafted features as input to train CNN.
+We will consider using automated extracted faetures (\textit{e.g.},orientation filed) as inputs for CNN training, with the goal of combining raw images and autimated features as input to train CNN.
 
 For CNN architecture, we will first use canonical architecture ( such as 5 \textit{convolutional} + 3 \textit{fully-connected} in \textit{AlexNet}\cite{krizhevsky2012imagenet}). We will then modify the CNN architecture to improve the performance.
 %
-
 \subsection{Classifier}
 %
 We will consider two classifiers. The first one is the prediction layer of CNN. The values in last layer indicates the predicted probabilities of each class.
 %
-The second one is support vector machine (SVM).
+The second one is support vector machine (SVM whose input features comprise of the CNN’s middle or last layers.
 
 \subsection{Data Augmentation}
 %
-For further improve the performance, we will use data augmentation technique to generate more train samples in order to increase the generalization ability of our model.
+To further improve the performance, we will use data augmentation technique to generate more training samples in order to increase the generalization ability of our model.
