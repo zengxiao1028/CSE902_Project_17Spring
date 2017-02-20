@@ -1,7 +1,7 @@
 import tensorflow as tf
 from network import network
 import numpy as np
-from network.gen_data import get_batch
+from network.gen_data import DataGenerator
 import project_config
 import time
 import os
@@ -12,8 +12,8 @@ def train():
     num_classes = 5
 
     net = network.FingerNet(shape,num_classes)
-
-    x_train, y_train, x_test, y_test = get_batch(project_config.DES_FOLDER,64)
+    dg = DataGenerator(project_config.DES_FOLDER)
+    x_train, y_train, x_test, y_test = dg.get_batch(64)
 
     sess = tf.Session()
 
