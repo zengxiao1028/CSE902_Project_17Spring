@@ -8,7 +8,7 @@ import os
 import fingerprint_data.downsample_sd4
 def train():
 
-    shape = (None,project_config.IMG_SIZE,project_config.IMG_SIZE,1)
+    shape = (None, project_config.IMG_SIZE, project_config.IMG_SIZE, 1)
     num_classes = 5
 
     net = network.FingerNet(shape,num_classes)
