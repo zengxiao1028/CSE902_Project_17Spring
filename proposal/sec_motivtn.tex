@@ -1,21 +1,26 @@
 
 The challenge of classifying fingerprint includes: 
 %
-1) the quality of some fingerprints images are poor; 
+1) quality of fingerprints, particularly poor quality; 
 %
-2) the inter-class dissimilarity is small and the intra-class similarity is small; 
+2) the inter-class dissimilarity is small and the intra-class similarity is small, for example, tented arch and loop may look similar; 
 %
-3) There are ambiguities in some labels. Some fingerprints can be classified into multiple classes, or different classes by different fingerprint experts.
+3) There are ambiguities in some labels (pattern class). Some fingerprints can be classified into multiple classes, or different classes by different fingerprint experts.
 
-To solve these problems, many researchers propose to use handcrafted features instead of raw fingerprint images for classification and many methods have been proposed, including ridge, orientation field, singular point.
+Previous work mostly consist of singularity points (core and delta) detection or extrating features such as ridge and orientation flow, or used human markups (or handcrafted features) as basis for pattern type classification. Therefore, the accuracy of these methods depends on the goodness (or utility) of the selected features and the precision of the feature extraction portion of the algorithms. Both are sensitive to the noise and the variations of the grayscale level of the input image.  Using handcrafted features can improve performance.  However, in addition to be burdensome and time consuming, accuracy of handcrafted features cannot be guaranteed due to the existence of noise and poor image quality. Moreover, their repeatability and reproducibility cannot be guranteed either due to inter- and intra-examiners variations \cite{fbiBlackbox}.  
 %
-Kai Cao \textit{et al.}\cite{cao2013fingerprint} propose a novel method to extract fingerprint orientation feature and use a hierarchical classifier for classification.
+Our approach differs from these works in the sense that we aim to use raw images instead of features as input. Convolutional neural network (CNN) has the capability of learning features and it can be directly applied on raw images. CNN also exhibits powerful classification capability in many areas\cite{lecun2015deep}\cite{szegedy2016rethinking}.
 %
-Ruxin Wang \textit{et al.} \cite{wang2014fingerprint} also use orientation filed as features. By adopting a stacked autoencoder , they achieve 93.1\% in four-class classification.
+An overview of related work follows. 
 %
-
-Using accurate handcrafted features can improve performance.  However, due to the existence of noise and poor image quality, the accuracy of handcrafted features cannot be guaranteed.
+Karu and Jain \cite{karuJain1996} presented a rule-based classifier based on extracting singular points. 
 %
-Convolutional neural network (CNN) has the capability of learning features and it can be directly applied on raw images. CNN also exhibits powerful classification capability in many areas\cite{lecun2015deep}\cite{szegedy2016rethinking}.
-
-
+Jain \textit{et al.} \cite{JainSalil1999} use a bank of Gabor filters to compute a feature vector (FingerCode) and then use a K-nearest neighbor classifier and a set of neural networks to classify a feature vector into one of the five fingerprint pattern classes.
+%
+Cappelli \textit{et al.} \cite{cappelli1999} partitioned a fingerprint directional image into ``homogeneous'' connected regions according to the fingerprint topology, resulting in a synthetic representation which is then used as a basis for the classification.
+%
+Kai Cao \textit{et al.}\cite{cao2013fingerprint} propose to extract fingerprint orientation feature and use a hierarchical classifier for classification.
+%
+Ruxin Wang \textit{et al.} \cite{wang2014fingerprint} also use orientation filed as features. By adopting a stacked autoencoder, they achieve 93.1\% in four-class classification.
+%%
+ 
