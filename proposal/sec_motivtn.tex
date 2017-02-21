@@ -3,11 +3,11 @@ The challenge of classifying fingerprint includes:
 %
 1) quality of fingerprints, particularly poor quality; 
 %
-2) the inter-class dissimilarity is small and the intra-class similarity is small, for example, tented arch and loop may look similar; 
+2) small inter-class dissimilarity and small intra-class similarity; for example, tented arch and loop may look similar; 
 %
-3) There are ambiguities in some labels (pattern class). Some fingerprints can be classified into multiple classes, or different classes by different fingerprint experts.
+3) ambiguities in some labels (pattern class; some fingerprints can be classified into multiple classes, or different classes by different fingerprint experts.
 
-Previous work mostly consist of singularity points (core and delta) detection or extracting features such as ridge and orientation flow, or used human markups (or handcrafted features) as basis for pattern type classification. 
+Previous work mostly consists of singularity points (core and delta) detection or extracting features such as ridge and orientation flow, or using human markups (or handcrafted features) as the basis for pattern type classification. 
 %
 Therefore, the accuracy of these methods depends on the goodness (or utility) of the selected features and the precision of the feature extraction portion of the algorithms. Both are sensitive to the noise and the variations of the gray-scale level of the input image.  
 %
@@ -24,14 +24,14 @@ Karu and Jain \cite{karuJain1996} presented a rule-based classifier based on ext
 %
 Fitz and Green \cite{FitzGreen1996} used a Hexagonal Fourier Transform to classify fingerprints into whorls, loops and arches. 
 %
-Jain \textit{et al.} \cite{JainSalil1999} use a bank of Gabor filters to compute a feature vector (FingerCode) and then use a K-nearest neighbor classifier and a set of neural networks to classify a feature vector into one of the five fingerprint pattern classes.
+Jain \textit{et al.} \cite{JainSalil1999} used a bank of Gabor filters to compute a feature vector (FingerCode) and then used a K-nearest neighbor classifier and a set of neural networks to classify a feature vector into one of the five fingerprint pattern classes.
 %
 Cappelli \textit{et al.} \cite{cappelli1999} partitioned a fingerprint directional image into ``homogeneous'' connected regions according to the fingerprint topology, resulting in a synthetic representation which is then used as a basis for the classification.
 %
 Bernard \textit{et al.} \cite{Bernard2001} used the Kohonen topologic map for fingerprint pattern classification. 
 %
-Kai Cao \textit{et al.}\cite{cao2013fingerprint} propose to extract fingerprint orientation feature and use a hierarchical classifier for classification.
+Kai Cao \textit{et al.}\cite{cao2013fingerprint} proposed to extract fingerprint orientation feature and used a hierarchical classifier for classification.
 %
-Ruxin Wang \textit{et al.} \cite{wang2014fingerprint} also use orientation filed as features. By adopting a stacked autoencoder, they achieve 93.1\% in four-class classification.
+Ruxin Wang \textit{et al.} \cite{wang2014fingerprint} also used orientation filed as features. By adopting a stacked autoencoder, they achieved 93.1\% in four-class classification.
 %%
  
