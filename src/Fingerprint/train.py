@@ -61,6 +61,7 @@ def main(_):
     #if raw data have not been processed
     if not os.path.exists(project_config.DES_FOLDER):
         os.mkdir(project_config.DES_FOLDER)
+        print("Converting fingerprint data")
         for i in range(8):
             scr_folder = os.path.join(project_config.RAWDATA_FOLDER, 'figs_' + str(i))
             # resize the images to the size we want

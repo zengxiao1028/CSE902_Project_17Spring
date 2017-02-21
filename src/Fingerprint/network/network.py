@@ -33,21 +33,20 @@ class FingerNet:
             conv_1 = slim.convolution2d(x_ph, 96, kernel_size=11, stride=4, padding='VALID', scope='conv1')
             conv_1_pool = slim.max_pool2d(conv_1, kernel_size=3, stride=2, scope='pool1')
 
-            conv_2_1 = slim.convolution2d(conv_1_pool, 256, kernel_size=3, stride=1, scope='conv2_1')
-            conv_2_2 = slim.convolution2d(conv_2_1, 256, kernel_size=3, stride=1, scope='conv2_2')
+            conv_2_1 = slim.convolution2d(conv_1_pool, 256, kernel_size=3,  scope='conv2_1')
+            conv_2_2 = slim.convolution2d(conv_2_1, 256, kernel_size=3,  scope='conv2_2')
 
-            conv_2_pool = slim.max_pool2d(conv_2_2, kernel_size=3, stride=2, scope='pool2')
+            conv_2_pool = slim.max_pool2d(conv_2_2, kernel_size=3, scope='pool2')
 
-            conv_3_1 = slim.convolution2d(conv_2_pool, 256, kernel_size=3, scope='conv3_1')
-            conv_3_2 = slim.convolution2d(conv_3_1, 256, kernel_size=3, scope='conv3_2')
+            conv_3_1 = slim.convolution2d(conv_2_pool, 384, kernel_size=3, scope='conv3_1')
+            conv_3_2 = slim.convolution2d(conv_3_1, 384, kernel_size=3, scope='conv3_2')
 
             conv_4_1 = slim.convolution2d(conv_3_2, 256, kernel_size=3, scope='conv4_1')
             conv_4_2 = slim.convolution2d(conv_4_1, 256, kernel_size=3, scope='conv4_2')
 
             conv_5 = slim.convolution2d(conv_4_2, 256, kernel_size=3, scope='conv5')
-            conv_5_1x1 = slim.convolution2d(conv_5, 128, kernel_size=1, scope='conv5_1x1')
 
-            conv_5_pool = slim.max_pool2d(conv_5_1x1, kernel_size=3, stride=2, scope='pool5')
+            conv_5_pool = slim.max_pool2d(conv_5, kernel_size=3, scope='pool5')
             conv_5_pool_flat = slim.flatten(conv_5_pool, scope='flat5')
 
             fc6 = slim.fully_connected(conv_5_pool_flat, 1024, scope='fc6')
