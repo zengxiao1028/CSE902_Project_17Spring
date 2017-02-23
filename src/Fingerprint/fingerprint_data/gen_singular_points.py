@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import cv2
-
+import project_config
 
 
 def gen_label():
@@ -29,19 +29,23 @@ def gen_label():
 
 
 if __name__ == '__main__':
-    path = 'data'
-    files = os.listdir(path)
+
+    files = os.listdir(project_config.DES_ORIGIN_FOLDER)
     d = gen_label()
 
     for file_name in files:
-        img = cv2.imread(os.path.join(path,'each'))
+        img = cv2.imread(os.path.join(project_config.DES_ORIGIN_FOLDER,file_name),cv2.IMREAD_COLOR)
+
         key = file_name[:8]
+
+        if key not in d:
+            continue
         points = d[key]
 
         for p in points:
+            img = cv2.rectangle(img, (p[0]-5, p[1]-5), (p[0]+5, p[1]+5), (255, 0, 0), 10)
 
-            img = cv2.rectangle(img, (p[0]-5, p[1]-5), (p[0]+5, p[1]+5), (255, 0, 0), 2)
-            cv2.imshow('img',img)
-            cv2.waitKey()
+        cv2.imshow('img', img)
+        cv2.waitKey()
 
 
