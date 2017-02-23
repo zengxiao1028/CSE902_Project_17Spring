@@ -1,9 +1,7 @@
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
+import tensorflow.contrib.slim.nets as nets
 
-
-def get_data_batch(data_folder, batch_size):
-    myDataset.py
 
 class FingerNet:
 
@@ -12,11 +10,48 @@ class FingerNet:
         self.input_shape = input_shape
         self.num_classes = num_classes
 
-        self.build_network()
+        self.build_inception_v3()
 
+    def build_inception_v3(self):
+        print('Building network...')
+
+        # inputs
+        x_ph = tf.placeholder(dtype=tf.float32, shape=(None,) + self.input_shape[1:])
+        y_ph = tf.placeholder(dtype=tf.float32, shape=(None,))
+
+        # global step indicator
+        global_step = tf.Variable(0, trainable=False)
+        # train or test
+        is_training = tf.placeholder(dtype=tf.bool)
+
+        logits, end_points = nets.inception.inception_v3(x_ph,self.num_classes,is_training=is_training)
+
+        # prediction
+        prediction = tf.argmax(logits, axis=1, name='prediction')
+        acc = slim.metrics.accuracy(predictions=tf.cast(prediction, dtype=tf.int32),
+                                    labels=tf.cast(y_ph, dtype=tf.int32))
+
+        # classification loss
+        x_entropy = tf.losses.sparse_softmax_cross_entropy(tf.cast(y_ph, dtype=tf.int32), logits)
+        # add regularization loss
+        total_loss = tf.losses.get_total_loss(add_regularization_losses=True)
+
+        #
+        self.optimizor = tf.train.AdamOptimizer(learning_rate=1e-5)
+        train_op = self.optimizor.minimize(total_loss, global_step=global_step)
+
+        self.x_ph = x_ph
+        self.y_ph = y_ph
+        self.is_training = is_training
+        self.acc = acc
+        self.loss = total_loss
+        self.x_entropy = x_entropy
+        self.optimizor = train_op
+        self.global_step = global_step
+        self.train_op = train_op
+        self.predction = prediction
 
     def build_network(self):
-
         print('Building network...')
 
         #inputs

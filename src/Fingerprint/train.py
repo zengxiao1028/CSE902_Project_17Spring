@@ -6,6 +6,7 @@ import project_config
 import time
 import os
 import fingerprint_data.downsample_sd4
+from sklearn.metrics import confusion_matrix
 def train():
 
     shape = (None, project_config.IMG_SIZE, project_config.IMG_SIZE, 1)
@@ -13,7 +14,7 @@ def train():
 
     net = network.FingerNet(shape,num_classes)
     dg = DataGenerator(project_config.DES_FOLDER)
-    x_train, y_train, x_test, y_test = dg.get_batch(64)
+    x_train, y_train, x_test, y_test = dg.get_batch(128)
 
     sess = tf.Session()
 
@@ -38,11 +39,11 @@ def train():
             if step % 50 == 0:
                 # Print status to stdout.
                 x_test_batch, y_test_batch = sess.run([x_test, y_test])
-                loss_test, acc_test, x_entropy_test = sess.run([ net.loss, net.acc, net.x_entropy ],
+                loss_test, acc_test, x_entropy_test, y_red = sess.run([ net.loss, net.acc, net.x_entropy, net.predction ],
                                              feed_dict={net.x_ph: x_test_batch, net.y_ph: y_test_batch,
                                                         net.is_training: False})
-                print('Step %d: loss(xentropy) = %.2f (%.2f)  acc = %.2f (%.3f sec)' % (step, loss_test, x_entropy_test,acc_test, duration))
-
+                print('Testing Step %d: loss(xentropy) = %.2f (%.2f)  acc = %.2f (%.3f sec)' % (step, loss_test, x_entropy_test,acc_test, duration))
+                print(confusion_matrix(y_test_batch, y_red))
     except tf.errors.OutOfRangeError:
         print('Done training')
     finally:

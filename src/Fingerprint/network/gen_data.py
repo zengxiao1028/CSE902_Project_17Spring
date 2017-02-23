@@ -23,9 +23,9 @@ def preprocess(img):
     image = tf.image.resize_images(image, [250, 250])
     image = tf.random_crop(image, [project_config.IMG_SIZE,project_config.IMG_SIZE,1])
 
-    distorted_image = tf.image.random_brightness(image, max_delta=63)
+    distorted_image = tf.image.random_brightness(image, max_delta= 32)
 
-    image = tf.image.random_contrast(distorted_image, lower=0.2, upper=1.8)
+    image = tf.image.random_contrast(distorted_image, lower=0.5, upper=1.5)
 
     #Subtract off the mean and divide by the variance of the pixels.
     #float_image = tf.image.per_image_whitening(distorted_image)
@@ -40,12 +40,13 @@ class DataGenerator():
 
     def get_batch(self, batch_size = 64):
         files = fnmatch.filter(os.listdir(self.imgs_folder),'*.png')
-        random.seed(1024)
-        random.shuffle(files)
+        files = sorted(files)
+        #random.seed(1024)
+        #random.shuffle(files)
         split_point = int(len(files)/10)
 
-        X_train = files[:split_point]
-        X_test = files[split_point:]
+        X_train = files[split_point:]
+        X_test = files[:split_point]
 
         y_train = [int(each.split('_')[3][0]) for each in X_train]
         y_test = [int(each.split('_')[3][0]) for each in X_test]
@@ -85,7 +86,7 @@ class DataGenerator():
 
         # Optional Image and Label Batching
         image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],
-                                                  batch_size=batch_size,capacity=256)
+                                                  batch_size=300, capacity=1024)
 
         #test samples
         return image_batch_train, label_batch_train, image_batch_test, label_batch_test
