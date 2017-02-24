@@ -51,7 +51,7 @@ class FingerNet:
         self.train_op = train_op
         self.predction = prediction
 
-    def build_network(self):
+    def build_classification_network(self):
         print('Building network...')
 
         #inputs
@@ -112,3 +112,54 @@ class FingerNet:
         self.global_step = global_step
         self.train_op = train_op
         self.predction = prediction
+
+
+    def build_localization_network(self):
+        print('Building network...')
+
+        # inputs
+        x_ph = tf.placeholder(dtype=tf.float32, shape=(None,) + self.input_shape[1:])
+        y_ph = tf.placeholder(dtype=tf.float32, shape=(None,) + self.input_shape[1:])
+
+        # global step indicator
+        global_step = tf.Variable(0, trainable=False)
+        # train or test
+        is_training = tf.placeholder(dtype=tf.bool)
+
+        with slim.arg_scope([slim.convolution2d, slim.fully_connected],
+                            weights_regularizer=slim.l2_regularizer(0.0001)):
+            conv_1 = slim.convolution2d(x_ph, 96, kernel_size=11, stride=4, scope='conv1')
+
+            conv_2_1 = slim.convolution2d(conv_1, 256, kernel_size=3, scope='conv2_1')
+            conv_2_2 = slim.convolution2d(conv_2_1, 256, kernel_size=3, scope='conv2_2')
+
+            conv_3_1 = slim.convolution2d(conv_2_2, 384, kernel_size=3, scope='conv3_1')
+            conv_3_2 = slim.convolution2d(conv_3_1, 384, kernel_size=3, scope='conv3_2')
+
+            conv_4_1 = slim.convolution2d(conv_3_2, 256, kernel_size=3, scope='conv4_1')
+            conv_4_2 = slim.convolution2d(conv_4_1, 256, kernel_size=3, scope='conv4_2')
+
+            conv_5 = slim.convolution2d(conv_4_2, 256, kernel_size=3, scope='conv5')
+
+            conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv5', activation_fn = tf.nn.sigmoid)
+
+
+
+        sq_dif = tf.squared_difference(conv_6,y_ph)
+        tf.losses.add_loss(sq_dif)
+
+        # add regularization loss
+        total_loss = tf.losses.get_total_loss(add_regularization_losses=True)
+
+        #
+        self.optimizor = tf.train.AdamOptimizer(learning_rate=1e-5)
+        train_op = self.optimizor.minimize(total_loss, global_step=global_step)
+
+        self.x_ph = x_ph
+        self.y_ph = y_ph
+        self.is_training = is_training
+        self.loss = total_loss
+        self.x_entropy = sq_dif
+        self.optimizor = train_op
+        self.global_step = global_step
+        self.train_op = train_op

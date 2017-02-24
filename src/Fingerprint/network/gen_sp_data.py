@@ -12,16 +12,19 @@ def read_images_from_disk(input_queue):
     Returns:
       Two tensors: the decoded image, and the string label.
     """
-    label = input_queue[1]
     file_contents = tf.read_file(input_queue[0])
+    mask_contents = tf.read_file(input_queue[1])
     img = tf.image.decode_png(file_contents, channels=1)
-    return img, label
+    img_mask = tf.image.decode_png(mask_contents, channels=1)
+    return img, img_mask
 
 
-def preprocess(img):
+def preprocess_x(img):
     image = tf.cast(img, tf.float32)
-    image = tf.image.resize_images(image, [250, 250])
-    image = tf.random_crop(image, [project_config.IMG_SIZE,project_config.IMG_SIZE,1])
+
+    image = tf.image.resize_images(image, [224, 224])
+
+    #image = tf.random_crop(image, [project_config.IMG_SIZE, project_config.IMG_SIZE, 1])
 
     distorted_image = tf.image.random_brightness(image, max_delta= 32)
 
@@ -32,33 +35,42 @@ def preprocess(img):
 
     return image
 
-class DataGenerator():
 
-    def __init__(self, imgs_folder):
+def preprocess_y(img):
+    image = tf.cast(img, tf.float32)
+
+    image = tf.image.resize_images(image, [224, 224])
+
+    return image
+
+
+class SPDataGenerator():
+
+    def __init__(self, imgs_folder, sp_labels_folder):
 
         self.imgs_folder = imgs_folder
+        self.sp_labels_folder = sp_labels_folder
 
     def get_batch(self, batch_size = 64):
+
         files = fnmatch.filter(os.listdir(self.imgs_folder),'*.png')
         files = sorted(files)
-        #random.seed(1024)
-        #random.shuffle(files)
+
         split_point = int(len(files)/10)
 
         X_train = files[split_point:]
         X_test = files[:split_point]
 
-        y_train = [int(each.split('_')[3][0]) for each in X_train]
-        y_test = [int(each.split('_')[3][0]) for each in X_test]
+        y_train = [os.path.join(self.sp_labels_folder, each) for each in X_train]
+        y_test = [os.path.join(self.sp_labels_folder, each) for each in X_test]
 
         # Reads pfathes of images together with their labels
         X_train_list = [os.path.join(self.imgs_folder, each) for each in X_train]
         X_test_list  = [os.path.join(self.imgs_folder, each) for each in X_test]
 
-
         #training sampels
         images_train = tf.convert_to_tensor(X_train_list, dtype=tf.string)
-        labels_train = tf.convert_to_tensor(y_train, dtype=tf.int32)
+        labels_train = tf.convert_to_tensor(y_train, dtype=tf.string)
 
         # Makes an input queue
         input_queue_train = tf.train.slice_input_producer([images_train, labels_train], shuffle=True)
@@ -66,7 +78,8 @@ class DataGenerator():
 
         # Optional Preprocessing or Data Augmentation
         # tf.image implements most of the standard image augmentation
-        image_train = preprocess(image_train)
+        image_train = preprocess_x(image_train)
+        label_train = preprocess_y(label_train)
 
         # Optional Image and Label Batching
         image_batch_train, label_batch_train = tf.train.batch([image_train, label_train],
@@ -74,11 +87,15 @@ class DataGenerator():
 
         #testing sampels
         images_test = tf.convert_to_tensor(X_test_list, dtype=tf.string)
-        labels_test = tf.convert_to_tensor(y_test, dtype=tf.int32)
+        labels_test = tf.convert_to_tensor(y_test, dtype=tf.string)
 
         # Makes an input queue
         input_queue_test = tf.train.slice_input_producer([images_test, labels_test], shuffle=True)
         image_test, label_test = read_images_from_disk(input_queue_test)
+
+        # Optional Preprocessing or Data Augmentation
+        # tf.image implements most of the standard image augmentation
+        image_test = preprocess_y(image_test)
 
         # Optional Image and Label Batching
         image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],
@@ -88,6 +105,6 @@ class DataGenerator():
         return image_batch_train, label_batch_train, image_batch_test, label_batch_test
 
 if __name__ == '__main__':
-    data_generator = DataGenerator(project_config.DES_FOLDER)
+    data_generator = SPDataGenerator(project_config.DES_FOLDER,project_config.SP_LABEL_FOLDER)
 
     data_generator.get_batch(batch_size=64)
