@@ -96,6 +96,7 @@ class SPDataGenerator():
         # Optional Preprocessing or Data Augmentation
         # tf.image implements most of the standard image augmentation
         image_test = preprocess_y(image_test)
+        label_test = preprocess_y(label_test)
 
         # Optional Image and Label Batching
         image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],
@@ -105,6 +106,6 @@ class SPDataGenerator():
         return image_batch_train, label_batch_train, image_batch_test, label_batch_test
 
 if __name__ == '__main__':
-    data_generator = SPDataGenerator(project_config.DES_FOLDER,project_config.SP_LABEL_FOLDER)
+    data_generator = SPDataGenerator(project_config.DATA_FOLDER, project_config.SP_LABEL_FOLDER)
 
     data_generator.get_batch(batch_size=64)

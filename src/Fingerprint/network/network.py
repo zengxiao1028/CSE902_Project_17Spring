@@ -10,7 +10,7 @@ class FingerNet:
         self.input_shape = input_shape
         self.num_classes = num_classes
 
-        self.build_inception_v3()
+        self.build_localization_network()
 
     def build_inception_v3(self):
         print('Building network...')
@@ -126,9 +126,9 @@ class FingerNet:
         # train or test
         is_training = tf.placeholder(dtype=tf.bool)
 
-        with slim.arg_scope([slim.convolution2d, slim.fully_connected],
+        with slim.arg_scope([slim.convolution2d],
                             weights_regularizer=slim.l2_regularizer(0.0001)):
-            conv_1 = slim.convolution2d(x_ph, 96, kernel_size=11, stride=4, scope='conv1')
+            conv_1 = slim.convolution2d(x_ph, 96, kernel_size=9, stride=4, padding='SAME', scope='conv1')
 
             conv_2_1 = slim.convolution2d(conv_1, 256, kernel_size=3, scope='conv2_1')
             conv_2_2 = slim.convolution2d(conv_2_1, 256, kernel_size=3, scope='conv2_2')
@@ -141,7 +141,7 @@ class FingerNet:
 
             conv_5 = slim.convolution2d(conv_4_2, 256, kernel_size=3, scope='conv5')
 
-            conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv5', activation_fn = tf.nn.sigmoid)
+            conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv6', activation_fn = tf.nn.sigmoid)
 
 
 

@@ -85,5 +85,5 @@ if __name__ == '__main__':
 
     for i in range(8):
         scr_folder = os.path.join(project_config.RAWDATA_FOLDER, 'figs_'+str(i))
-        convert_original_size(scr_folder,project_config.DES_ORIGIN_FOLDER)
+        convert_original_size(scr_folder, project_config.DATA_ORIGIN_FOLDER)
 

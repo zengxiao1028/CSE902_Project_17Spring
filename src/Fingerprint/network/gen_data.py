@@ -97,6 +97,6 @@ class DataGenerator():
         return image_batch_train, label_batch_train, image_batch_test, label_batch_test
 
 if __name__ == '__main__':
-    data_generator = DataGenerator(project_config.DES_FOLDER)
+    data_generator = DataGenerator(project_config.DATA_FOLDER)
 
     data_generator.get_batch(batch_size=64)
