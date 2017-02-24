@@ -18,7 +18,7 @@ def read_images_from_disk(input_queue):
     return img, label
 
 
-def preprocess(img):
+def preprocess_train(img):
     image = tf.cast(img, tf.float32)
     image = tf.image.resize_images(image, [250, 250])
     image = tf.random_crop(image, [project_config.IMG_SIZE,project_config.IMG_SIZE,1])
@@ -29,6 +29,13 @@ def preprocess(img):
 
     #Subtract off the mean and divide by the variance of the pixels.
     #float_image = tf.image.per_image_whitening(distorted_image)
+
+    return image
+
+def preprocess_eval(img):
+    image = tf.cast(img, tf.float32)
+    image = tf.image.resize_images(image, [250, 250])
+    image = tf.random_crop(image, [project_config.IMG_SIZE,project_config.IMG_SIZE,1])
 
     return image
 
@@ -66,7 +73,7 @@ class DataGenerator():
 
         # Optional Preprocessing or Data Augmentation
         # tf.image implements most of the standard image augmentation
-        image_train = preprocess(image_train)
+        image_train = preprocess_train(image_train)
 
         # Optional Image and Label Batching
         image_batch_train, label_batch_train = tf.train.batch([image_train, label_train],
@@ -79,6 +86,8 @@ class DataGenerator():
         # Makes an input queue
         input_queue_test = tf.train.slice_input_producer([images_test, labels_test], shuffle=True)
         image_test, label_test = read_images_from_disk(input_queue_test)
+
+        image_test = preprocess_eval(image_test)
 
         # Optional Image and Label Batching
         image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],

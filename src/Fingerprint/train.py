@@ -5,7 +5,7 @@ from network.gen_data import DataGenerator
 import project_config
 import time
 import os
-import fingerprint_data.downsample_sd4
+import fingerprint_data.convert_sd4
 from sklearn.metrics import confusion_matrix
 def train():
 
