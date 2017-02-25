@@ -8,6 +8,8 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 ![Image](proposal/fig/Fingerprint_classes.png)
 
+This project aims to classify a fingerprint into one of the following type:
+(a) Arch (b) Tented Arch (c) Left Loop (d) Right Loop (e) Whorl.
 
 # Header 1
 ## Header 2
