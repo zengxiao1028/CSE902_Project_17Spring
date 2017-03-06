@@ -22,9 +22,9 @@ def read_images_from_disk(input_queue):
 def preprocess_x(img):
     image = tf.cast(img, tf.float32)
 
-    image = tf.image.resize_images(image, [224, 224])
+    image = tf.image.resize_images(image, [project_config.IMG_SIZE, project_config.IMG_SIZE])
 
-    #image = tf.random_crop(image, [project_config.IMG_SIZE, project_config.IMG_SIZE, 1])
+    image = tf.random_crop(image, [project_config.IMG_SIZE, project_config.IMG_SIZE, 1])
 
     distorted_image = tf.image.random_brightness(image, max_delta= 32)
 
@@ -39,7 +39,9 @@ def preprocess_x(img):
 def preprocess_y(img):
     image = tf.cast(img, tf.float32)
 
-    image = tf.image.resize_images(image, [224, 224])
+    image = tf.image.resize_images(image, [project_config.IMG_SIZE, project_config.IMG_SIZE])
+
+    image = tf.random_crop(image, [project_config.IMG_SIZE, project_config.IMG_SIZE, 1])
 
     return image
 
@@ -100,7 +102,7 @@ class SPDataGenerator():
 
         # Optional Image and Label Batching
         image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],
-                                                  batch_size=300, capacity=1024)
+                                                  batch_size=batch_size, capacity=1024)
 
         #test samples
         return image_batch_train, label_batch_train, image_batch_test, label_batch_test

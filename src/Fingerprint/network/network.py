@@ -1,16 +1,19 @@
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import tensorflow.contrib.slim.nets as nets
-
+import numpy as np
 
 class FingerNet:
 
-    def __init__(self,input_shape,num_classes):
+    def __init__(self,input_shape,num_classes,network):
 
         self.input_shape = input_shape
         self.num_classes = num_classes
 
-        self.build_localization_network()
+        if network == 'classification':
+            self.build_inception_v3()
+        elif network == 'localization':
+            self.build_localization_network()
 
     def build_inception_v3(self):
         print('Building network...')
@@ -128,25 +131,32 @@ class FingerNet:
 
         with slim.arg_scope([slim.convolution2d],
                             weights_regularizer=slim.l2_regularizer(0.0001)):
-            conv_1 = slim.convolution2d(x_ph, 96, kernel_size=9, stride=4, padding='SAME', scope='conv1')
+            conv_1 = slim.convolution2d(x_ph, 96, kernel_size=9, stride=4, scope='conv1')
 
-            conv_2_1 = slim.convolution2d(conv_1, 256, kernel_size=3, scope='conv2_1')
-            conv_2_2 = slim.convolution2d(conv_2_1, 256, kernel_size=3, scope='conv2_2')
+            conv_2_1 = slim.convolution2d(conv_1, 64, kernel_size=3, stride=2, scope='conv2_1')
+            conv_2_2 = slim.convolution2d(conv_2_1, 64, kernel_size=3, stride=2, scope='conv2_2')
+            conv_3_2 = slim.convolution2d(conv_2_2, 64, kernel_size=3,  scope='conv3_2')
 
-            conv_3_1 = slim.convolution2d(conv_2_2, 384, kernel_size=3, scope='conv3_1')
-            conv_3_2 = slim.convolution2d(conv_3_1, 384, kernel_size=3, scope='conv3_2')
+            conv_3_2_upsample = tf.image.resize_images(conv_3_2, np.array(conv_3_2.get_shape().as_list()[1:3])*2)
 
-            conv_4_1 = slim.convolution2d(conv_3_2, 256, kernel_size=3, scope='conv4_1')
-            conv_4_2 = slim.convolution2d(conv_4_1, 256, kernel_size=3, scope='conv4_2')
+            conv_4_1 = slim.convolution2d(conv_3_2_upsample, 64, kernel_size=3 , scope='conv4_1')
+            conv_4_1_upsample = tf.image.resize_images(conv_4_1, np.array(conv_4_1.get_shape().as_list()[1:3]) * 2)
 
-            conv_5 = slim.convolution2d(conv_4_2, 256, kernel_size=3, scope='conv5')
+            conv_4_2 = slim.convolution2d(conv_4_1_upsample, 64, kernel_size=3, scope='conv4_2')
+            conv_4_2_upsample = tf.image.resize_images(conv_4_2, np.array(conv_4_2.get_shape().as_list()[1:3]) * 2)
+
+            conv_4_3 = slim.convolution2d(conv_4_2_upsample, 64, kernel_size=3, scope='conv4_3')
+            conv_4_3_upsample = tf.image.resize_images(conv_4_3, np.array(conv_4_3.get_shape().as_list()[1:3]) * 2)
+
+            conv_5 = slim.convolution2d(conv_4_3_upsample, 64, kernel_size=3, scope='conv_5')
 
             conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv6', activation_fn = tf.nn.sigmoid)
 
-
+            y_ph = y_ph / 255.
 
         sq_dif = tf.squared_difference(conv_6,y_ph)
-        tf.losses.add_loss(sq_dif)
+        mean_square_erro = tf.reduce_mean(sq_dif)
+        tf.losses.add_loss(mean_square_erro)
 
         # add regularization loss
         total_loss = tf.losses.get_total_loss(add_regularization_losses=True)

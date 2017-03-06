@@ -12,9 +12,9 @@ def train():
     shape = (None, project_config.IMG_SIZE, project_config.IMG_SIZE, 1)
     num_classes = 5
 
-    net = network.FingerNet(shape,num_classes)
+    net = network.FingerNet(shape, num_classes, network='localization')
     dg = SPDataGenerator(project_config.SP_DATA_FOLDER, project_config.SP_LABEL_FOLDER)
-    x_train, y_train, x_test, y_test = dg.get_batch(10)
+    x_train, y_train, x_test, y_test = dg.get_batch(64)
 
     sess = tf.Session()
 
@@ -31,7 +31,7 @@ def train():
 
             # Run one step of the model.
             x_train_batch, y_train_batch = sess.run([x_train, y_train])
-            _, step,loss, acc, x_entropy = sess.run([net.train_op, net.global_step, net.loss, net.acc, net.x_entropy],
+            _, step,loss, = sess.run([net.train_op, net.global_step, net.loss],
                                        feed_dict={net.x_ph:x_train_batch,net.y_ph:y_train_batch,net.is_training:True})
 
             duration = time.time() - start_time
@@ -39,7 +39,7 @@ def train():
             if step % 50 == 0:
                 # Print status to stdout.
                 x_test_batch, y_test_batch = sess.run([x_test, y_test])
-                loss_test = sess.run([ net.loss],
+                loss_test = sess.run( net.loss,
                                              feed_dict={net.x_ph: x_test_batch, net.y_ph: y_test_batch,
                                                         net.is_training: False})
                 print('Testing Step %d: loss = %.2f (%.3f sec)' % (step, loss_test, duration))
