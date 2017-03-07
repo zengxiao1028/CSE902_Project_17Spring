@@ -7,14 +7,15 @@ import time
 import os
 import fingerprint_data.convert_sd4
 from sklearn.metrics import confusion_matrix
+
 def train():
 
     shape = (None, project_config.IMG_SIZE, project_config.IMG_SIZE, 1)
     num_classes = 5
 
-    net = network.FingerNet(shape,num_classes)
+    net = network.FingerNet(shape,num_classes,'classification')
     dg = DataGenerator(project_config.DATA_FOLDER)
-    x_train, y_train, x_test, y_test = dg.get_batch(128)
+    x_train, y_train, x_test, y_test = dg.get_batch_same_sample(128)
 
     sess = tf.Session()
 
@@ -61,12 +62,15 @@ def main(_):
 
     #if raw data have not been processed
     if not os.path.exists(project_config.DATA_FOLDER):
-        os.mkdir(project_config.DATA_FOLDER)
-        print("Converting fingerprint data")
-        for i in range(8):
-            scr_folder = os.path.join(project_config.RAWDATA_FOLDER, 'figs_' + str(i))
-            # resize the images to the size we want
-            fingerprint_data.downsample_sd4.convert(scr_folder, project_config.DATA_FOLDER)
+
+        if os.path.exists(project_config.RAWDATA_FOLDER):
+            os.mkdir(project_config.DATA_FOLDER)
+            print("Converting fingerprint data")
+            for i in range(8):
+                scr_folder = os.path.join(project_config.RAWDATA_FOLDER, 'figs_' + str(i))
+
+                # resize the images to the size we want
+                fingerprint_data.downsample_sd4.convert(scr_folder, project_config.DATA_FOLDER)
 
     train()
 

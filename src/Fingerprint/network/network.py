@@ -150,7 +150,7 @@ class FingerNet:
 
             conv_5 = slim.convolution2d(conv_4_3_upsample, 64, kernel_size=3, scope='conv_5')
 
-            conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv6', activation_fn = None)
+            conv_6 = slim.convolution2d(conv_5, 1, kernel_size=3, scope='conv6', activation_fn = None)
 
             y_ph = y_ph / 255.
 
@@ -173,3 +173,4 @@ class FingerNet:
         self.optimizor = train_op
         self.global_step = global_step
         self.train_op = train_op
+        self.conv6 = conv_6

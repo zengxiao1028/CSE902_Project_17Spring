@@ -96,6 +96,56 @@ class DataGenerator():
         #test samples
         return image_batch_train, label_batch_train, image_batch_test, label_batch_test
 
+    def get_batch_same_sample(self, batch_size = 64):
+        files = fnmatch.filter(os.listdir(self.imgs_folder), '*.png')
+        files = sorted(files)
+        # random.seed(1024)
+        # random.shuffle(files)
+        split_point = int(len(files) / 2)
+
+        X_train = files[split_point:]
+        X_test = files[:split_point]
+
+        y_train = [int(each.split('_')[3][0]) for each in X_train]
+        y_test = [int(each.split('_')[3][0]) for each in X_test]
+
+        # Reads pfathes of images together with their labels
+        X_train_list = [os.path.join(self.imgs_folder, each) for each in X_train]
+        X_test_list = [os.path.join(self.imgs_folder, each) for each in X_test]
+
+        # training sampels
+        images_train = tf.convert_to_tensor(X_train_list, dtype=tf.string)
+        labels_train = tf.convert_to_tensor(y_train, dtype=tf.int32)
+
+        # Makes an input queue
+        input_queue_train = tf.train.slice_input_producer([images_train, labels_train], shuffle=True)
+        image_train, label_train = read_images_from_disk(input_queue_train)
+
+        # Optional Preprocessing or Data Augmentation
+        # tf.image implements most of the standard image augmentation
+        image_train = preprocess_train(image_train)
+
+        # Optional Image and Label Batching
+        image_batch_train, label_batch_train = tf.train.batch([image_train, label_train],
+                                                              batch_size=batch_size, capacity=512)
+
+        # testing sampels
+        images_test = tf.convert_to_tensor(X_test_list, dtype=tf.string)
+        labels_test = tf.convert_to_tensor(y_test, dtype=tf.int32)
+
+        # Makes an input queue
+        input_queue_test = tf.train.slice_input_producer([images_test, labels_test], shuffle=True)
+        image_test, label_test = read_images_from_disk(input_queue_test)
+
+        image_test = preprocess_eval(image_test)
+
+        # Optional Image and Label Batching
+        image_batch_test, label_batch_test = tf.train.batch([image_test, label_test],
+                                                            batch_size=300, capacity=1024)
+
+        # test samples
+        return image_batch_train, label_batch_train, image_batch_test, label_batch_test
+
 if __name__ == '__main__':
     data_generator = DataGenerator(project_config.DATA_FOLDER)
 
