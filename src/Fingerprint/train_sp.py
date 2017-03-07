@@ -26,7 +26,7 @@ def train():
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
     try:
-        while not coord.should_stop():
+        while not coord.s0hould_stop():
             start_time = time.time()
 
             # Run one step of the model.

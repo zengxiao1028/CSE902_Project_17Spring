@@ -11,7 +11,7 @@ if __name__ == '__main__':
     pos[:, :, 0] = x
     pos[:, :, 1] = y
 
-    rv = multivariate_normal([50, 100], [[3, 0], [0, 3]])
+    rv = multivariate_normal([50, 100], [[5, 0], [0, 5]])
     pdf = rv.pdf(pos)
     pdf = pdf / (np.max(pdf))
 

@@ -150,7 +150,7 @@ class FingerNet:
 
             conv_5 = slim.convolution2d(conv_4_3_upsample, 64, kernel_size=3, scope='conv_5')
 
-            conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv6', activation_fn = tf.nn.sigmoid)
+            conv_6 = slim.convolution2d(conv_5, 3, kernel_size=3, scope='conv6', activation_fn = None)
 
             y_ph = y_ph / 255.
 

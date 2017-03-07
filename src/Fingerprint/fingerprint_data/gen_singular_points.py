@@ -68,7 +68,7 @@ def main_1():
         img = np.zeros(shape=(512, 512))
 
         for p in points:
-            rv = multivariate_normal([p[0], p[1]], [[20, 0], [0, 20]])
+            rv = multivariate_normal([p[0], p[1]], [[50, 0], [0, 50]])
             pdf = rv.pdf(pos)
             pdf = pdf / (np.max(pdf))
             pdf = np.rot90(pdf,3) * 255
