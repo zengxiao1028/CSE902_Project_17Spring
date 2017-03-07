@@ -8,6 +8,7 @@ import os
 import fingerprint_data.convert_sd4
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
+
 def train():
 
     shape = (None, project_config.IMG_SIZE, project_config.IMG_SIZE, 1)
@@ -92,4 +93,5 @@ def main(_):
     train()
 
 if __name__ == '__main__':
+
     tf.app.run()
