@@ -1,1 +1,2 @@
-Please configure ROOT_DIR variable in project_config.py
+1.Configure ROOT_DIR variable in project_config.py
+2. run python train.py
