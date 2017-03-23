@@ -2,7 +2,6 @@
 
 You can use the [editor on GitHub](https://github.com/zengxiao1028/CSE902_Project_17Spring/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ## CS902_PROJECT 2017SPRING
 
@@ -46,7 +45,8 @@ dataset: NIST Special Database 14(https://www.nist.gov/srd/nist-special-database
 80% samples are used for training. 20% are used for testing.
 After training for 80K steps, the top-1 accuracy is 97%.
 
-![Image](proposal/fig/Fingerprint_classes.png)
+Some failure cases are shown below:
+![Image](proposal/fig/fail.png)
 
 ```
 # Header 1
