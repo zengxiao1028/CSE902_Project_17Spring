@@ -48,6 +48,8 @@ After training for 80K steps, the top-1 accuracy is 97%.
 Some failure cases are shown below:
 ![Image](proposal/fig/fail.png)
 
+Full projecct description can be found at [Link](url)
+
 ```
 # Header 1
 ## Header 2
