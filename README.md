@@ -41,11 +41,12 @@ The network we use consists of 8 convolutional layers and 2 fully-connected laye
 
 We use data augmentation techniques (random contrast, brightness adjustion, rotation, translation)
 
-DATASET: NIST Special Database 14(https://www.nist.gov/srd/nist-special-database-14)
+dataset: NIST Special Database 14(https://www.nist.gov/srd/nist-special-database-14). Totally 2700 subjects, 54000 samples.
 
 80% samples are used for training. 20% are used for testing.
 After training for 80K steps, the top-1 accuracy is 97%.
 
+![Image](proposal/fig/Fingerprint_classes.png)
 
 ```
 # Header 1
