@@ -1,20 +1,21 @@
-import tensorflow as tf
-from network import network
-import numpy as np
-from network.gen_sp_data import SPDataGenerator
-import project_config
-import time
 import os
-import fingerprint_data.convert_sd4
-from sklearn.metrics import confusion_matrix
+import time
+
 import matplotlib.pyplot as plt
+import tensorflow as tf
+
+import fingerprint_data.sd4.convert_sd4
+import project_config
+from data_provider.gen_sd4_sp_data import SPDataGenerator
+from network import SD14FingerNet
+
 
 def train():
 
-    shape = (None, project_config.IMG_SIZE, project_config.IMG_SIZE, 1)
+    shape = (None, project_config.SD14_INPUT_IMG_SIZE, project_config.SD14_INPUT_IMG_SIZE, 1)
     num_classes = 5
 
-    net = network.FingerNet(shape, num_classes, network='localization')
+    net = SD14FingerNet.FingerNet(shape, num_classes, network='localization')
     dg = SPDataGenerator(project_config.SP_DATA_FOLDER, project_config.SP_LABEL_FOLDER)
     x_train, y_train, x_test, y_test = dg.get_batch(64)
 
@@ -82,13 +83,13 @@ def main(_):
     os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
     # if raw data have not been processed
-    if not os.path.exists(project_config.DATA_FOLDER):
-        os.mkdir(project_config.DATA_FOLDER)
+    if not os.path.exists(project_config.SD4_DATA_FOLDER):
+        os.mkdir(project_config.SD4_DATA_FOLDER)
         print("Converting fingerprint data")
         for i in range(8):
             scr_folder = os.path.join(project_config.RAWDATA_FOLDER, 'figs_' + str(i))
             # resize the images to the size we want
-            fingerprint_data.downsample_sd4.convert(scr_folder, project_config.DATA_FOLDER)
+            fingerprint_data.downsample_sd4.convert(scr_folder, project_config.SD4_DATA_FOLDER)
 
     train()
 
