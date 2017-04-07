@@ -4,8 +4,8 @@ import tensorflow.contrib.slim.nets as nets
 import project_config
 from network.spatial_transformer import transformer
 from util.tf_utils import *
-
-
+from tensorflow.contrib.slim.nets import resnet_v2
+from tensorflow.contrib.slim.nets import resnet_utils
 class FingerNet:
 
     def __init__(self,input_shape,transformed_shape,num_classes,network):
@@ -15,9 +15,64 @@ class FingerNet:
         self.transformed_shape = transformed_shape
         if network == 'classification':
             #self.build_inception_v3()
-            self.build_classification_network()
+            self.build_resnetv2()
+            #self.build_classification_network()
         elif network == 'localization':
             self.build_sp_localization_network()
+
+    def build_resnetv2(self):
+        print('Building network...')
+
+        # inputs
+        x_ph = tf.placeholder(dtype=tf.float32, shape=(None,) + self.input_shape[1:])
+        y_ph = tf.placeholder(dtype=tf.float32, shape=(None,))
+
+        # global step indicator
+        global_step = tf.Variable(0, trainable=False)
+        # train or test
+        is_training = tf.placeholder(dtype=tf.bool)
+
+        # x_out,theta = self._build_transformed_network(x_ph, (project_config.SD14_TRANSFORMED_IMG_SIZE,
+        #                                                      project_config.SD14_TRANSFORMED_IMG_SIZE), is_training)
+        #
+        # self.x_transformed = x_out
+        # self.theta = theta
+        conv_1 = slim.convolution2d(x_ph, 96, kernel_size=7, stride=2, scope='conv1',weights_regularizer=slim.l2_regularizer(0.0001))
+        conv_1 = slim.batch_norm(conv_1,is_training=is_training)
+        conv_2 = slim.convolution2d(conv_1, 96, kernel_size=7, stride=2, scope='conv2',
+                                    weights_regularizer=slim.l2_regularizer(0.0001))
+        conv_2 = slim.batch_norm(conv_2,is_training=is_training)
+
+        with slim.arg_scope(resnet_utils.resnet_arg_scope(is_training)):
+            net, end_points = resnet_v2.resnet_v2_50(conv_2, self.num_classes)
+
+        net = slim.flatten(net)
+        prediction = tf.argmax(net, axis=1, name='prediction')
+
+        acc = slim.metrics.accuracy(predictions=tf.cast(prediction, dtype=tf.int32),
+                                    labels=tf.cast(y_ph, dtype=tf.int32))
+
+        # classification loss
+        x_entropy = tf.losses.sparse_softmax_cross_entropy(tf.cast(y_ph, dtype=tf.int32), net)
+        # add regularization loss
+        total_loss = tf.losses.get_total_loss(add_regularization_losses=True)
+
+        #
+        self.optimizor = tf.train.AdamOptimizer(learning_rate=1e-4)
+        train_op = self.optimizor.minimize(total_loss, global_step=global_step)
+
+        self.fea = net
+        self.x_ph = x_ph
+        self.y_ph = y_ph
+        self.is_training = is_training
+        self.acc = acc
+        self.loss = total_loss
+        self.x_entropy = x_entropy
+        self.optimizor = train_op
+        self.global_step = global_step
+        self.train_op = train_op
+        self.predction = prediction
+
 
     def build_inception_v3(self):
         print('Building network...')

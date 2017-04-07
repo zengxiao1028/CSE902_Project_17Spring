@@ -8,7 +8,7 @@ RAWDATA_FOLDER = '/data/xiao/fingerprint/NISTSpecialDatabase4GrayScaleImagesofFI
 
 
 
-DATA_ORIGIN_FOLDER = os.path.join(ROOT_DIR, 'fingerprint_data/sd4/data_origin')
+SD4_DATA_ORIGIN_FOLDER = os.path.join(ROOT_DIR, 'fingerprint_data/sd4/data_origin')
 SP_LABEL_FOLDER = os.path.join(ROOT_DIR,'fingerprint_data/sd4/sp_label')
 SP_DATA_FOLDER = os.path.join(ROOT_DIR,'fingerprint_data/sd4/sp_data')
 

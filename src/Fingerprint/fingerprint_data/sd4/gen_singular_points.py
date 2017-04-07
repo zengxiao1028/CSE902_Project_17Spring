@@ -31,7 +31,7 @@ def gen_label():
 
 
 def main_1():
-    files = os.listdir(project_config.DATA_ORIGIN_FOLDER)
+    files = os.listdir(project_config.SD4_DATA_ORIGIN_FOLDER)
     d = gen_label()
 
     for file_name in files:
@@ -57,7 +57,7 @@ def main_1():
             img += pdf
 
         cv2.imwrite(os.path.join(project_config.SP_LABEL_FOLDER,file_name), img)
-        shutil.copy(os.path.join(project_config.DATA_ORIGIN_FOLDER, file_name),
+        shutil.copy(os.path.join(project_config.SD4_DATA_ORIGIN_FOLDER, file_name),
                     os.path.join(project_config.SP_DATA_FOLDER,file_name))
 
 if __name__ == '__main__':
