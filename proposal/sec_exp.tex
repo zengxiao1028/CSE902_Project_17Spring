@@ -36,7 +36,8 @@ For NIST SD14 experiments, we use the samples of 80\% subjects for training, tot
 The remained data of 20\% subjects are used for testing, totally $10800$ images. 9 of these images are discarded due to the same reason above.
 %
 
-For NIST SD4 experiments, we first use NIST SD14 data to pre-train the model. Then we use all the first samples (2000) in each image pair as training samples and all the second samples (2000) for testing.
+For NIST SD4 experiments,  we adopt two evaluation protocols. The first protocol is cross-sample for fair comparison with other works, where we use all the first samples(2000) in each image pair as training samples and all the second samples (2000) for testing. The second protocol is cross-finger, where we use 50\% finger samples for training and 50\% finger samples for testing. To boost the performance for NIST SD4, We use NIST SD14 data to pre-train the model.
+
 %
 
 
@@ -59,13 +60,13 @@ To achieve 4-class classification, we merge tented arch class into arch class wh
 	\end{subfigure}%
 	\begin{subfigure}[b]{0.25\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{fig/figs/confusion_matrix_svm_sd4.pdf}
+		\includegraphics[width=\linewidth]{fig/figs/confusion_matrix_svm_sd4_cross_subject.pdf}
 		\caption{SVM NIST SD4 }
 		\label{fig.cnf_matrix_5class.svm_sd4}
 	\end{subfigure}%
 	\begin{subfigure}[b]{0.25\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{fig/figs/confusion_matrix_net_sd4.pdf}
+		\includegraphics[width=\linewidth]{fig/figs/confusion_matrix_net_sd4_cross_subject.pdf}
 		\caption{ConvNet NIST SD4 }
 		\label{fig.cnf_matrix_5class.net_sd4}
 	\end{subfigure}
@@ -81,7 +82,7 @@ To achieve 4-class classification, we merge tented arch class into arch class wh
 	\end{subfigure}%
 	\begin{subfigure}[b]{0.25\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{fig/figs/confusion_matrix_svm_sd4_4class.pdf}
+		\includegraphics[width=\linewidth]{fig/figs/confusion_matrix_svm_sd4_4class_cross_subject.pdf}
 		\caption{SVM NIST SD4}
 		\label{fig.cnf_matrix_4class.svm_sd4}
 	\end{subfigure}%
@@ -108,7 +109,7 @@ As we can see, the number of arch and tented arch samples are relatively small c
 	\scalebox{0.87}{
 	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		& \textbf{\begin{tabular}[c]{@{}c@{}}\# of \\ classes\end{tabular}} & \textbf{accuracy} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ precision\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average\\  recall\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ F1 score\end{tabular}} \\ \hline
+		\textbf{method} & \textbf{\begin{tabular}[c]{@{}c@{}}\# of \\ classes\end{tabular}} & \textbf{accuracy} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ precision\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average\\  recall\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ F1 score\end{tabular}} \\ \hline
 		ConvNet & 5 & 0.9861 & 0.9843 & 0.9793 & 0.9817 \\ \hline
 		SVM & 5 & 0.9861 & 0.9822 & 0.9781 & 0.9801 \\ \hline
 		SVM & 4 & 0.9875 & 0.9869 & 0.9867 & 0.9868 \\ \hline
@@ -138,16 +139,37 @@ For 4-class classification, the confusion matrix is shown in Figure.\ref{fig.cnf
 		\scalebox{0.87}{
 	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		 & \textbf{\begin{tabular}[c]{@{}c@{}}\# of \\ classes\end{tabular}} & \textbf{accuracy} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ precision\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average\\  recall\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ F1 score\end{tabular}} \\ \hline
+		 \textbf{method} & \textbf{\begin{tabular}[c]{@{}c@{}}\# of \\ classes\end{tabular}} & \textbf{accuracy} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ precision\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average\\  recall\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}average \\ F1 score\end{tabular}} \\ \hline
+		 \multicolumn{6}{|c|}{\textbf{Cross-Sample}}      \\ \hline
 		ConvNet & 5 & 0.9215 & 0.9225 & 0.9215 & 0.9217 \\ \hline
 		SVM & 5 & 0.9275 & 0.9325 & 0.9275 & 0.9288 \\ \hline
-		SVM & 4 & 0.9495 & 0.9576 & 0.9459 & 0.9514 \\ \hline
-\begin{tabular}[c]{@{}c@{}}\cite{cao2013fingerprint}(17\% \\ two-label)\end{tabular} & 5 & 0.959 & - & - & - \\ \hline
-\begin{tabular}[c]{@{}c@{}}\cite{cao2013fingerprint}(17\%\\ two-label)\end{tabular} & 4 & 0.972 & - & - & - \\ \hline
+		SVM & 4 & 0.9495 & 0.9576 & 0.9459 & 0.9514 \\ 
+\hhline{|======|}
+\multicolumn{6}{|c|}{\textbf{Cross-Finger}}      \\ \hline
+		ConvNet & 5 & 0.8985 & 0.8991 & 0.8986 & 0.8987 \\ \hline
+SVM & 5 & 0.9120 & 0.9132 & 0.9117 & 0.9123 \\ \hline
+SVM & 4 & 0.9390 & 0.9452 & 0.9357 & 0.9403 \\ \hline
 		
 \end{tabular}}
 \end{table}
 
 
-
+\begin{table}[!ht]
+	\centering
+	\caption{Experiment results for NIST SD4 with two labels.}
+	\label{tab.SD4_result_two_labels}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{method} & \textbf{\# of classes} & \textbf{accuracy} & \textbf{protocol} \\ \hline
+		ConvNet & 5 & 0.9535 & cross-sample \\ \hline
+		SVM & 5 & 1.0 & cross-sample \\ \hline
+		SVM & 4 & 1.0 & cross-sample \\ \hline
+		\cite{cao2013fingerprint} & 5 & 0.959 & cross-sample \\ \hline
+		\cite{cao2013fingerprint}& 4 & 0.972 & cross-sample \\ \hline
+		\cite{wang2014fingerprint} & 4 & 0.980 & not-spepcified \\ \hline
+		ConvNet & 5 & 0.945 & cross-finger \\ \hline
+		SVM & 5 & 1.0 & cross-finger \\ \hline
+		SVM & 4 & 1.0 & cross-finger \\ \hline
+	\end{tabular}
+\end{table}
 
